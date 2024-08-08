@@ -53,8 +53,6 @@ class Product(models.Model):
     last_modified_date = models.DateTimeField(
         verbose_name="дата последнего изменения", default=timezone.now
     )
-    manufactured_at = models.DateTimeField(
-        verbose_name="дата производства продукта", default=timezone.now)
 
     def __str__(self):
         return f"{self.name} {self.description} {self.price} {self.category}"

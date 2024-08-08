@@ -9,7 +9,7 @@ class Category(models.Model):
         help_text="Введите наименование категории",
     )
     description = models.TextField(
-        max_length=1000, verbose_name="описание", help_text="Введите описание категории"
+        max_length=1000, verbose_name="описание", help_text="Введите описание категории",
     )
 
     def __str__(self):
@@ -28,7 +28,7 @@ class Product(models.Model):
         help_text="Введите наименование продукта",
     )
     description = models.TextField(
-        max_length=1000, verbose_name="описание", help_text="Введите описание продукта"
+        max_length=1000, verbose_name="описание", help_text="Введите описание продукта",
     )
     img_preview = models.ImageField(
         upload_to="imgproduct/",

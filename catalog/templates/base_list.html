@@ -7,7 +7,7 @@
             {% for product in home %}
             <div class="col">
                 <div class="card shadow-sm">
-                    <img src="{{ product.img_preview | media_filter }}">
+                    <img src="{{ product.img_preview | media_filter }}" width="300" height="200">
                     <div class="card-body">
                         <p class="card-text">{{ product.name }}</p>
                         <p class="card-text">Описание: {{ product.description | truncatewords:20|truncatechars:100 }}</p>

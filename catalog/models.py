@@ -53,6 +53,13 @@ class Product(models.Model):
     last_modified_date = models.DateTimeField(
         verbose_name="дата последнего изменения", default=timezone.now
     )
+    views_counter = models.PositiveIntegerField(
+        verbose_name="Счетчик просмотров",
+        help_text="Введите колличество просмотров",
+        default=0)
+    is_published = models.BooleanField(default=True, verbose_name="опубликовано")
+    slug = models.CharField(max_length=150, verbose_name='slug', null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.name} {self.description} {self.price} {self.category}"

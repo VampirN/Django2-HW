@@ -20,13 +20,12 @@ class ProductListView(ListView):
 class ContactsView(TemplateView):
     template_name = 'catalog/contacts.html'
 
-    def contacts(request):
-        if request.method == 'POST':
-            name = request.POST.get('name')
-            phone = request.POST.get('phone')
-            message = request.POST.get('message')
-            print(f'{name} ({phone}): {message}')
-        return render(request, 'contacts.html')
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        message = request.POST.get('message')
+        print(f'{name} ({phone}): {message}')
+        return self.get(request, *args, **kwargs)
 
 
 class ProductDetailView(DetailView):

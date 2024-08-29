@@ -20,7 +20,7 @@ class Blog(models.Model):
         help_text="Описание блога",
     )
     preview = models.ImageField(
-        upload_to='imgproduct',
+        upload_to='imgproduct/',
         blank=True,
         null=True,
         verbose_name='Фото',

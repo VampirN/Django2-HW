@@ -20,7 +20,7 @@
                                 <a class="btn btn-warning" href="{% url 'home:product_update' product.pk %}" role="button">Редактировать</a>
                                  <div class="card-footer">
                                      {% for version in product.versions.all %}
-                                   {% if version.indicates_current_version %}
+                                   {% if version.version_flag %}
                                  <p>Версия: {{ version.version_number }} Название: {{ version.version_name }}</p>
                                     {% endif %}
                                      {% endfor %}

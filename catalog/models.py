@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from users.models import User
+
 
 class Category(models.Model):
     name = models.CharField(
@@ -59,6 +61,8 @@ class Product(models.Model):
         default=0)
     is_published = models.BooleanField(default=True, verbose_name="опубликовано")
     slug = models.CharField(max_length=150, verbose_name='slug', null=True, blank=True)
+    manufacturer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Производитель",
+                                     null=True, blank=True)
 
 
     def __str__(self):

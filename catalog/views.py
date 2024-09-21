@@ -1,5 +1,7 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
+from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 
@@ -7,7 +9,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from pytils.translit import slugify
 
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from catalog.models import Product, Category, Version
 
 
@@ -46,7 +48,7 @@ class ProductDetailView(DetailView):
         return context
 
 
-class ProductCreateView(CreateView, LoginRequiredMixin):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
@@ -59,17 +61,10 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_card')
-
-    # def form_valid(self, form):
-    #     if form.is_valid():
-    #         new_blog = form.save()
-    #         new_blog.slug = slugify(new_blog.name)
-    #         new_blog.save()
-    #     return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('catalog:product_card', args=[self.kwargs.get('pk')])
@@ -95,6 +90,21 @@ class ProductUpdateView(UpdateView):
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
+
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.manufacturer:
+            return ProductForm
+        if user.has_perm("catalog.can_edit_is_published") and user.has_perm("catalog.can_edit_description") and user.has_perm("catalog.can_edit_category"):
+            return ProductModeratorForm
+        raise PermissionDenied
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.manufacturer:
+            return self.object
+        else:
+            raise PermissionDenied
 
 
 class ProductDeleteView(DeleteView):

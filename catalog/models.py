@@ -59,10 +59,11 @@ class Product(models.Model):
         verbose_name="Счетчик просмотров",
         help_text="Введите колличество просмотров",
         default=0)
-    is_published = models.BooleanField(default=True, verbose_name="опубликовано")
+    is_published = models.BooleanField(default=False, verbose_name="опубликовано")
     slug = models.CharField(max_length=150, verbose_name='slug', null=True, blank=True)
     manufacturer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Производитель",
                                      null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.name} {self.description} {self.price} {self.category}"
@@ -70,10 +71,15 @@ class Product(models.Model):
     class Meta:
         verbose_name = "продукт"
         verbose_name_plural = "продукты"
-        ordering = (
+        ordering = [
             "name",
             "category",
-        )
+        ]
+        permissions = [
+            ("can_edit_category", "Can edit category"),
+            ("can_edit_description", "Can edit description"),
+            ("can_edit_is_published", "Can edit is_published")
+        ]
 
 
 class Version(models.Model):

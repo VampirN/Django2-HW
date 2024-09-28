@@ -64,7 +64,6 @@ class Product(models.Model):
     manufacturer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Производитель",
                                      null=True, blank=True)
 
-
     def __str__(self):
         return f"{self.name} {self.description} {self.price} {self.category}"
 
@@ -98,5 +97,3 @@ class Version(models.Model):
     class Meta:
         verbose_name = "версия продукта"
         verbose_name_plural = "версии продуктов"
-
-

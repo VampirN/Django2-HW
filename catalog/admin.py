@@ -19,7 +19,3 @@ class VersionAdmin(admin.ModelAdmin):
     list_display = ('product', 'version_number', 'version_name', 'version_flag')
     list_filter = ('product', 'version_number', 'version_name')
     search_fields = ('product', 'version_number', 'version_name')
-
-
-
-

@@ -45,8 +45,7 @@ class Command(BaseCommand):
                     price=product['fields']['price'],
                     created_at=product['fields']['created_at'],
                     last_modified_date=product['fields']['last_modified_date'],
-
-                    )
+                )
             )
 
         # Создаем объекты продуктов в базе с помощью метода bulk_create()

@@ -1,8 +1,7 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
-from django.http import HttpResponseForbidden
-from django.shortcuts import render
+
 from django.urls import reverse_lazy, reverse
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
@@ -11,6 +10,7 @@ from pytils.translit import slugify
 
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from catalog.models import Product, Category, Version
+from catalog.services import get_categories_from_cache
 
 
 class ProductListView(ListView):
@@ -57,6 +57,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         product = form.save()
         user = self.request.user
         product.manufacturer = user
+        product.slug = slugify(product.name)
         product.save()
         return super().form_valid(form)
 
@@ -114,17 +115,12 @@ class ProductDeleteView(DeleteView):
 
 class CategoryListView(ListView):
     model = Category
-    context_object_name = 'category'
+    template_name = 'catalog/category_list.html'
+
+    def get_queryset(self):
+        return get_categories_from_cache()
 
 
 class CategoryDetailView(DetailView):
     model = Category
     context_object_name = 'category'
-
-
-
-
-
-
-
-
